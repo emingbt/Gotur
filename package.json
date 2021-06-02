@@ -1,0 +1,27 @@
+{
+  "name": "gotur",
+  "version": "1.0.0",
+  "description": "Götür",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
+    "mongoose-autopopulate": "^0.12.3",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "ava": "^2.4.0",
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "nodemon": "node index.js",
+    "test": "ava --verbose --watch",
+    "test-coverage": "nyc ava --verbose"
+  },
+  "author": "GBT",
+  "license": "ISC"
+}

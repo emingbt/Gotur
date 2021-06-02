@@ -1,0 +1,6 @@
+extends layout
+
+block content
+    h1 The number of the users is #{users.length}
+    each user in users
+      pre #{JSON.stringify(user, null, 4)}

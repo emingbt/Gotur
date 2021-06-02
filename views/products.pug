@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    h1 The number of the products is  #{products.length}
+    each product in products
+        h2 #{product.name} - #{product.price} - #{product.quantity}
+        h3 (#{product.id})
