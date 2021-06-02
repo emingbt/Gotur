@@ -11,10 +11,14 @@ class UserService extends BaseService {
             console.log(`Sorry! There are just ${product.quantity} ${product.name}s we have.`)
             return
         }
+
         for (let i=0;i<quantity;i++) {
         await user.basket.push(product._id)
         }
+
+        quantity = +quantity
         user.totalPrice += (product.price * quantity)
+        
         await user.save()
         console.log("Added to the basket")
     }
@@ -30,6 +34,10 @@ class UserService extends BaseService {
             console.log(`${chalk.red("Sorry!")} There isn't enough money to pay in your wallet.`)
             return
         }
+        else if (user.basket.length == 0) {
+            console.log(`${chalk.red("Sorry!")} There isn't any product in the basket.`)
+            return
+        }
 
         for (let i=0;i<user.basket.length;i++) {
             const product = await ProductService.find(user.basket[i])
@@ -43,16 +51,10 @@ class UserService extends BaseService {
         console.log(chalk.green("Paying completed"))
     }
 
-    async addMoney (user, money) {
+    async addMoney(user, money) {
         user.wallet += +money
         await user.save()
         console.log("Money in your wallet is increased.")
-    }
-
-    async addToFavorites (user, product) {
-        user.favoriteProducts.push(product)
-        await user.save()
-        console.log("Product has been added to your favorites.")
     }
 }
 

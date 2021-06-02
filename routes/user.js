@@ -39,7 +39,7 @@ router.delete("/:id", async (req, res) => {
   res.send(user)
 })
 
-router.post("/:userId/:productId/:quantity", async (req, res) => {
+router.post("/:userId/add/:productId/:quantity", async (req, res) => {
   const user = await UserService.find(req.params.userId)
   const product = await ProductService.find(req.params.productId)
   await UserService.addToBasket(user, product, req.params.quantity)
@@ -61,7 +61,7 @@ router.post("/:id/basket", async (req, res) => {
 router.delete("/:id/basket/:productId", async(req, res) => {
   const user = await UserService.find(req.params.id)
   const product = await ProductService.find(req.params.productId)
-  await UserService.removeFromBasket(user, product)-
+  await UserService.removeFromBasket(user, product)
   res.send(user)
 })
 
@@ -69,13 +69,6 @@ router.delete("/:id/basket/:productId", async(req, res) => {
 router.post("/:id/:money", async(req, res) => {
   const user = await UserService.find(req.params.id)
   await UserService.addMoney(user, req.params.money)
-  res.send(user)
-})
-
-router.post("/:id/favorite/:product", async (req, res) => {
-  console.log("test1")
-  const user = await UserService.find(req.params.id)
-  await UserService.addToFavorites(user, req.params.product)
   res.send(user)
 })
 

@@ -1,7 +1,6 @@
 const test = require("ava")
 const request = require("supertest")
 const app = require("../app")
-const { addToFavorites } = require("../services/user-service")
 
 test("App js", async t => {
     const res = await request(app).get("/")
@@ -108,7 +107,7 @@ test("User can add a product to the basket", async t => {
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
     const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/${productCreated._id}/${quantity}`)
+    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/add/${productCreated._id}/${quantity}`)
     t.is(addToBasketRes.status, 200)
 
     const userBasket = addToBasketRes.body
@@ -137,7 +136,7 @@ test("User can remove a product from the basket", async t => {
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
     const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/${productCreated._id}/${quantity}`)
+    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/add/${productCreated._id}/${quantity}`)
 
     const userBasket = addToBasketRes.body
 
@@ -167,7 +166,7 @@ test("User can pay for products in the basket", async t => {
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
     const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/${productCreated._id}/${quantity}`)
+    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/add/${productCreated._id}/${quantity}`)
 
     let userBasket = addToBasketRes.body
 
@@ -220,7 +219,7 @@ test("User can't add product to basket if quantity isn't enough" , async t => {
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
     const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/${productCreated._id}/${quantity}`)
+    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/add/${productCreated._id}/${quantity}`)
     t.is(addToBasketRes.status, 200)
 
     const userAltered = addToBasketRes.body
@@ -247,7 +246,7 @@ test("User can't pay the basket if there isn't enough money", async t => {
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
     const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/${productCreated._id}/${quantity}`)
+    const addToBasketRes = await request(app).post(`/users/${userCreated._id}/add/${productCreated._id}/${quantity}`)
 
     let userBasket = addToBasketRes.body
 
@@ -259,24 +258,18 @@ test("User can't pay the basket if there isn't enough money", async t => {
     t.deepEqual(userPayed.basket, userBasket.basket)
 })
 
-test("User can add products to favorites", async (t) => {
+test("User can't pay if there isn't any product in th basket", async (t) => {
     const userToCreate = {
-        name: "Nesrin",
+        name: "Arif",
         age: 20,
-        wallet: 40,
+        wallet: 50,
         basket: [],
         totalPrice: 0
     }
-    const productToCreate = {
-        name: "Harby",
-        price: 1,
-        quantity: 60
-    }
+
     const userCreated = (await request(app).post("/users/all").send(userToCreate)).body
-    const productCreated = (await  request(app).post("/products/all").send(productToCreate)).body
 
-    const addToFavoritesRes = await request(app).post(`/users/${userCreated._id}/favorite/${productCreated._id}`)
-    t.is(addToFavoritesRes.status, 200)
-
-    t.is(userCreated.favoriteProducts, [productCreated._id])
+    const payTheBasketRes = await request(app).post(`/users/${userCreated._id}/basket`)
+    t.is(payTheBasketRes.status, 200)
+    t.is(payTheBasketRes.body.wallet, userCreated.wallet)
 })
