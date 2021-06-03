@@ -7,6 +7,7 @@ const productRouter = require('./routes/product')
 
 require('./mongo-connection')
 //wait for it
+//master???
 const app = express()
 app.use(cors())
 //another test
