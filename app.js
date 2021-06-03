@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 
 app.use('/users', userRouter)
 app.use('/products', productRouter)
-
+//test?
 app.get('/', (req, res) => {
   res.render('index')
 })
