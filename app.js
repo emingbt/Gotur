@@ -6,7 +6,7 @@ const userRouter = require('./routes/user')
 const productRouter = require('./routes/product')
 
 require('./mongo-connection')
-
+//wait for it
 const app = express()
 app.use(cors())
 //another test
